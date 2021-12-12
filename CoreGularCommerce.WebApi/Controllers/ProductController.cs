@@ -1,7 +1,9 @@
+using AutoMapper;
+using CoreGularCommerce.Core.Abstract;
 using CoreGularCommerce.Core.Entities;
-using CoreGularCommerce.Repo.Data;
+using CoreGularCommerce.Core.Specification.Concrete;
+using CoreGularCommerce.WebApi.DataTransformationObjects.Concrete;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CoreGularCommerce.WebApi.Controllers
 {
@@ -9,28 +11,35 @@ namespace CoreGularCommerce.WebApi.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-
-        private readonly StoreContext _context;
-        public ProductController(StoreContext context)
+        private readonly IGenericRepository<Product> _productRepository;
+        private readonly IMapper _mapper;
+        public ProductController(IGenericRepository<Product> productRepository, IMapper mapper)
         {
-            _context = context;
+            _productRepository = productRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAll() 
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetAll()
         {
-            var products = await _context.Products.ToListAsync();
-            return Ok(products);
-        } 
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if(product == null) {
+            var spec = new ProductMapSpecification();
+            var products = await _productRepository.GetEntitiesWithSpecificationAsync(spec);
+            if(products == null) {
                 return NotFound();
             }
-            return Ok(product);
+            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductDto>> GetProduct(int id)
+        {
+            var spec = new ProductMapSpecification(id);
+            var product = await _productRepository.GetEntityWithSpecificationAsync(spec);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<Product, ProductDto>(product));
         }
     }
 }
