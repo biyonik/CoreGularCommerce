@@ -2,7 +2,7 @@ namespace CoreGularCommerce.Core.Specification.Concrete
 {
     public class ProductSpecParams
     {
-        private const int MaxPageSize = 10;
+        private const int MaxPageSize = 50;
 
         public int PageIndex { get; set; } = 1;
         private int _pageSize = 6;
@@ -15,7 +15,7 @@ namespace CoreGularCommerce.Core.Specification.Concrete
         public int? ProductTypeId { get; set; }
         public string? Sort { get; set; }
         private string _search;
-        public string Search 
+        public string? Search 
         {
             get => _search;
             set => _search = value.ToLower();
