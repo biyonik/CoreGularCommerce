@@ -4,6 +4,7 @@ using CoreGularCommerce.Core.Entities;
 using CoreGularCommerce.Core.Specification.Concrete;
 using CoreGularCommerce.WebApi.DataTransformationObjects.Concrete;
 using CoreGularCommerce.WebApi.Errors;
+using CoreGularCommerce.WebApi.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoreGularCommerce.WebApi.Controllers
@@ -21,14 +22,17 @@ namespace CoreGularCommerce.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetAll()
+        public async Task<ActionResult<Pagination<ProductDto>>> GetAll([FromQuery]ProductSpecParams specParams)
         {
-            var spec = new ProductMapSpecification();
+            var spec = new ProductMapSpecification(specParams);
+            var countSpec = new ProductCountSpecificationFilters(specParams);
+            var totalItems = await _productRepository.CountAsync(spec);
             var products = await _productRepository.GetEntitiesWithSpecificationAsync(spec);
+            var mappedData = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
             if(products == null) {
                 return NotFound();
             }
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products));
+            return Ok(new Pagination<ProductDto>(specParams.PageIndex, specParams.PageSize, totalItems, mappedData));
         }
 
         [HttpGet("{id}")]

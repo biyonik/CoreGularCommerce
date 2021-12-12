@@ -8,5 +8,6 @@ namespace CoreGularCommerce.Core.Abstract
         Task<IReadOnlyList<TEntity>> GetAllAsync();
         Task<TEntity> GetEntityWithSpecificationAsync(ISpecification<TEntity> specification);
         Task<IReadOnlyList<TEntity>> GetEntitiesWithSpecificationAsync(ISpecification<TEntity> specification);
+        Task<int> CountAsync(ISpecification<TEntity> specification);
     }
 }

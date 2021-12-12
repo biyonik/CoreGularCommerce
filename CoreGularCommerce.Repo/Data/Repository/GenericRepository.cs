@@ -12,6 +12,9 @@ namespace CoreGularCommerce.Repo.Data.Repository
         {
             _context = context;
         }
+
+        public async Task<int> CountAsync(ISpecification<TEntity> specification) => await ApplySpecification(specification).CountAsync();
+
         public async Task<IReadOnlyList<TEntity>> GetAllAsync() => await _context.Set<TEntity>().ToListAsync();
 
         public async Task<TEntity> GetByIdAsync(int id) => await _context.Set<TEntity>().FindAsync(id);
