@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CoreGularCommerce.WebApi.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class BrandController : ControllerBase
+    public class BrandController : BaseApiController
     {
 
         private readonly IGenericRepository<Brand> _brandRepository;

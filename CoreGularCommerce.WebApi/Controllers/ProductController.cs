@@ -3,13 +3,12 @@ using CoreGularCommerce.Core.Abstract;
 using CoreGularCommerce.Core.Entities;
 using CoreGularCommerce.Core.Specification.Concrete;
 using CoreGularCommerce.WebApi.DataTransformationObjects.Concrete;
+using CoreGularCommerce.WebApi.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoreGularCommerce.WebApi.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseApiController
     {
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IMapper _mapper;
@@ -20,6 +19,8 @@ namespace CoreGularCommerce.WebApi.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetAll()
         {
             var spec = new ProductMapSpecification();
@@ -31,13 +32,15 @@ namespace CoreGularCommerce.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
             var spec = new ProductMapSpecification(id);
             var product = await _productRepository.GetEntityWithSpecificationAsync(spec);
             if (product == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404));
             }
             return Ok(_mapper.Map<Product, ProductDto>(product));
         }

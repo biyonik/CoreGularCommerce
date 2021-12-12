@@ -2,7 +2,11 @@ using CoreGularCommerce.Core.Abstract;
 using CoreGularCommerce.Repo.Data;
 using CoreGularCommerce.Repo.Data.Repository;
 using CoreGularCommerce.Repo.Data.SeedData;
+using CoreGularCommerce.WebApi.Errors;
+using CoreGularCommerce.WebApi.Extensions;
 using CoreGularCommerce.WebApi.Helper;
+using CoreGularCommerce.WebApi.Middlewares;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,15 +18,13 @@ builder.Services.AddDbContext<StoreContext>(options => {
     options.UseSqlite(connectionString);
 });
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IBrandRepository, BrandRepository>();
-builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerServices();
+builder.Services.ApplicationServices();
 
 var app = builder.Build();
 using(var scope = app.Services.CreateScope()) {
@@ -38,12 +40,15 @@ using(var scope = app.Services.CreateScope()) {
     }
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerDocumentationBuilder();
 }
+
+app.UseStatusCodePagesWithReExecute("/api/Error/{0}");
 
 app.UseHttpsRedirection();
 
