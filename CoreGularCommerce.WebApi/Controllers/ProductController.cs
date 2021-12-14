@@ -26,7 +26,7 @@ namespace CoreGularCommerce.WebApi.Controllers
         {
             var spec = new ProductMapSpecification(specParams);
             var countSpec = new ProductCountSpecificationFilters(specParams);
-            var totalItems = await _productRepository.CountAsync(spec);
+            var totalItems = await _productRepository.CountAsync(countSpec);
             var products = await _productRepository.GetEntitiesWithSpecificationAsync(spec);
             var mappedData = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(products);
             if(products == null) {

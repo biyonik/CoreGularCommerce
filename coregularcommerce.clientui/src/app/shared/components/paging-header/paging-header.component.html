@@ -1,0 +1,16 @@
+<header>
+  <span *ngIf="this.totalCount && this.totalCount > 0">
+    <strong>{{this.totalCount}}</strong> üründen
+    <strong>
+      {{(pageNumber-1)*pageSize+1}} -
+      {{
+        pageNumber*pageSize
+        >= this.totalCount
+        ? this.totalCount
+        : pageNumber * pageSize
+      }}
+    </strong>
+    arası ürünler gösteriliyor.</span
+  >
+  <span *ngIf="this.totalCount <= 0">Hiçbir ürün bulunamadı</span>
+</header>
