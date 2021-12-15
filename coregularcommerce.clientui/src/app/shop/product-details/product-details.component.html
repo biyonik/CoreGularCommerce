@@ -1,0 +1,26 @@
+<div class="row" *ngIf="product">
+  <div class="col-6">
+    <img
+      src="{{product.imagePath}}"
+      alt="{{product.name}}"
+      class="img-fluid w-50"
+      >
+  </div>
+  <div class="col-6">
+    <h4>{{product.name}}</h4>
+    <h4>{{product.brand}} - {{product.productType}}</h4>
+    <h5>{{product.price | currency}}</h5>
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+      <button type="button" class="btn btn-light"><i class="fa fa-minus"></i></button>
+      <button type="button" class="btn btn-secondary">3</button>
+      <button type="button" class="btn btn-light"><i class="fa fa-plus"></i></button>
+      <button class="btn btn-outline-secondary ml-3">Sepete Ekle</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ml-3">
+      <h4>Detay</h4>
+      <p>{{product.description}}</p>
+    </div>
+  </div>
+</div>
