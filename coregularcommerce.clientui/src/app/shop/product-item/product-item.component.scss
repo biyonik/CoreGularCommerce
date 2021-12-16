@@ -1,7 +1,48 @@
-.btn-group {
-  width: 100%;
+.card-row {
+  display: flex;
+  justify-content: space-between;
 }
 
-.btn {
-  width: 50%;
+.card {
+  width: 400px;
+  padding: 20px;
+  border: 1px solid #8f8e8e;
+  box-shadow: 2px 2px 4px rgba(0,0,0,.15);
+}
+
+.card > img {
+  border-radius: 7px 7px 0 0;
+  max-width: 100%;
+  height: auto;
+}
+
+.card h6 {
+  color: rebeccapurple;
+}
+
+.card span {
+  padding: 0.25em;
+  background-color: #eddbff;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.button {
+  text-decoration: none;
+  background-color: rebeccapurple;
+  color: #ffffff;
+  padding: 0.5em 1em;
+  display: inline-block;
+}
+
+.view {
+  text-decoration: none;
+  background-color: rgb(5, 121, 14);
+  color: #ffffff;
+  padding: 0.5em 1em;
+  display: inline-block;
+}
+
+article > a {
+  text-decoration: none;
 }

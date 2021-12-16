@@ -1,57 +1,58 @@
-<div class="container-fluid">
+<div class="container-fluid mt-5">
   <div class="row">
     <section class="col-md-3">
-      <h5 class="text-danger ml-3">Sırala</h5>
-      <select
-        class="custom-select mb-2"
-        (change)="onSortSelected($event.target.value)"
-      >
-        <option
-          *ngFor="let sortOption of sortOptions"
-          [value]="sortOption.value"
+      <ng-container *ngIf="productTypes && brands">
+        <h5 class="text-danger ml-3">Sırala</h5>
+        <select
+          class="custom-select mb-2"
+          (change)="onSortSelected($event.target.value)"
         >
-          {{ sortOption.name }}
-        </option>
-      </select>
-      <h5 class="text-danger ml-3">Marka</h5>
-      <ul class="list-group my-3">
-        <li
-          class="list-group-item"
-          *ngFor="let brand of brands"
-          [class.active]="brand.id === this.shopParams.brandId"
-          [value]="brand.id"
-          (click)="onBrandSelected(brand.id)"
-          aria-current="true"
-        >
-          {{ brand.name }}
-        </li>
-      </ul>
+          <option
+            *ngFor="let sortOption of sortOptions"
+            [value]="sortOption.value"
+          >
+            {{ sortOption.name }}
+          </option>
+        </select>
+        <h5 class="text-danger ml-3">Marka</h5>
+        <ul class="list-group my-3">
+          <li
+            class="list-group-item"
+            *ngFor="let brand of brands"
+            [class.active]="brand.id === this.shopParams.brandId"
+            [value]="brand.id"
+            (click)="onBrandSelected(brand.id)"
+            aria-current="true"
+          >
+            {{ brand.name }}
+          </li>
+        </ul>
 
-      <h5 class="text-danger ml-3">Ürün Türü</h5>
-      <ul class="list-group my-3">
-        <li
-          class="list-group-item"
-          *ngFor="let productType of productTypes"
-          [class.active]="productType.id === this.shopParams.productTypeId"
-          [value]="productType.id"
-          (click)="onProductTypeSelected(productType.id)"
-          aria-current="true"
-        >
-          {{ productType.name }}
-        </li>
-      </ul>
+        <h5 class="text-danger ml-3">Ürün Türü</h5>
+        <ul class="list-group my-3">
+          <li
+            class="list-group-item"
+            *ngFor="let productType of productTypes"
+            [class.active]="productType.id === this.shopParams.productTypeId"
+            [value]="productType.id"
+            (click)="onProductTypeSelected(productType.id)"
+            aria-current="true"
+          >
+            {{ productType.name }}
+          </li>
+        </ul>
+      </ng-container>
     </section>
 
     <section class="col-md-9">
       <div class="d-flex justify-content-between align-items-center pb-2">
-
         <app-paging-header
-          [totalCount] = "this.totalCount"
-          [pageNumber] = "this.shopParams.pageNumber"
-          [pageSize] = "this.shopParams.pageSize"
+          [totalCount]="this.totalCount"
+          [pageNumber]="this.shopParams.pageNumber"
+          [pageSize]="this.shopParams.pageSize"
         ></app-paging-header>
 
-        <div class="form-inline mt-2">
+        <div class="form-inline mt-2" *ngIf="products">
           <input
             type="text"
             class="form-control mr-2"
@@ -59,8 +60,12 @@
             placeholder="Ara..."
             #search
           />
-          <button class="btn btn-outline-primary my-2" (click)="onSearch()">Ara</button>
-          <button class="btn btn-outline-success ml-2 my-2" (click)="onReset()">Yenile</button>
+          <button class="btn btn-outline-primary my-2" (click)="onSearch()">
+            Ara
+          </button>
+          <button class="btn btn-outline-success ml-2 my-2" (click)="onReset()">
+            Yenile
+          </button>
         </div>
       </div>
 
@@ -72,13 +77,12 @@
 
       <!-- Pagination -->
       <div class="d-flex justify-content-center" *ngIf="this.totalCount > 0">
-          <app-pager
-            [totalCount] = "this.totalCount"
-            [pageSize] = "this.shopParams.pageSize"
-            (pageChanged) = "onPageChanged($event)"
-          ></app-pager>
+        <app-pager
+          [totalCount]="this.totalCount"
+          [pageSize]="this.shopParams.pageSize"
+          (pageChanged)="onPageChanged($event)"
+        ></app-pager>
       </div>
-
     </section>
   </div>
 </div>
