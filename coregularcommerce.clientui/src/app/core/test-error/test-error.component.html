@@ -1,0 +1,11 @@
+<div class="row">
+  <button class="btn btn-outline-primary mr-3" (click)="get500ServerError()">Test 500 Server Error</button>
+  <button class="btn btn-outline-success mr-3" (click)="get404NotFound()">Test 404 NotFound Error</button>
+  <button class="btn btn-outline-danger mr-3" (click)="get400BadRequest()">Test 400 BadRequest Error</button>
+  <button class="btn btn-outline-warning mr-3" (click)="get400BadRequestValidation()">Test 400 BadRequestValidation Error</button>
+</div>
+<div class="row mt-5" *ngIf="validationErrors">
+  <ul class="text-danger">
+    <li *ngFor="let validErr of validationErrors">{{validErr}}</li>
+  </ul>
+</div>
